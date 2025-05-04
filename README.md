@@ -1,92 +1,119 @@
-# 🚀 Sistema de Autenticação com JWT
+# 🔐 API de Autenticação com Node.js, Express, JWT e SQLite
 
-## 📌 Sobre o projeto
-Este projeto implementa um sistema simples de autenticação utilizando **JWT (JSON Web Token)**. Ele permite que usuários se registrem, façam login e acessem rotas protegidas.
+Este projeto implementa uma API de autenticação robusta e segura, utilizando Node.js, o framework Express, JSON Web Tokens (JWT) para autenticação e autorização, e SQLite para persistência de dados dos usuários.
 
-✅ Registro e login de usuários  
-✅ Geração e validação de tokens JWT  
-✅ Proteção de endpoints utilizando autenticação  
+## 🚀 Tecnologias Utilizadas
 
----
+* **Node.js:** Ambiente de execução JavaScript para o servidor.
+* **Express:** Framework web minimalista e flexível para Node.js, facilitando a criação de APIs RESTful.
+* **jsonwebtoken:** Biblioteca para gerar e verificar JSON Web Tokens.
+* **bcryptjs:** Biblioteca para hash de senhas de forma segura.
+* **better-sqlite3:** Biblioteca rápida e simples para interagir com bancos de dados SQLite.
 
-## 📂 Estrutura do projeto
+## ⚙️ Pré-requisitos
 
-📦 projeto-autenticacao ┣ 📜 server.js # Arquivo principal do servidor ┣ 📜 README.md # Documentação do projeto ┗ 📂 node_modules # Dependências do projeto (geradas pelo npm)
+Antes de começar, certifique-se de ter instalado em sua máquina:
 
+* **Node.js:** (Versão 16 ou superior recomendada) - [https://nodejs.org/](https://nodejs.org/)
+* **npm** (geralmente instalado com Node.js) ou **yarn** - [https://yarnpkg.com/](https://yarnpkg.com/)
+* **Git:** (para clonar o repositório) - [https://git-scm.com/](https://git-scm.com/)
+* **Postman:** (para testar os endpoints da API) - [https://www.postman.com/](https://www.postman.com/) ou **cURL** (ferramenta de linha de comando para fazer requisições HTTP).
 
----
+## 🛠️ Como Configurar e Executar
 
-## 🛠️ Tecnologias usadas
-- **Node.js** - Runtime para execução do JavaScript no servidor.
-- **Express.js** - Framework para criação da API.
-- **JWT (jsonwebtoken)** - Geração e validação de tokens de autenticação.
-- **bcryptjs** - Hashing de senhas para segurança.
+1.  **Clone o repositório:**
 
----
+    ```bash
+    git clone [https://docs.github.com/articles/referencing-and-citing-content](https://docs.github.com/articles/referencing-and-citing-content)
+    cd [https://github.com/DiegoCosta-DOC/Desafio_3.git]
+    ```
+2.  **Instale as dependências:**
 
-## ⚙️ Instalação
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
+3.  **Execute a API:**
 
-1️⃣ **Clone este repositório**  
-```sh
-git clone https://github.com/seu-usuario/projeto-autenticacao.git
-2️⃣ Acesse a pasta do projeto
+    ```bash
+    node index.js
+    # ou
+    npm start
+    # ou
+    yarn start
+    ```
 
-sh
-cd projeto-autenticacao
-3️⃣ Instale as dependências
+    A API estará rodando em `http://localhost:3000`. O banco de dados SQLite (`users.db`) será criado automaticamente na primeira execução.
 
-sh
-npm install
-4️⃣ Inicie o servidor
+## 🧪 Testando os Endpoints
 
-sh
-node server.js
-🔹 O servidor rodará em http://localhost:3000.
+Utilize o Postman ou cURL para interagir com os seguintes endpoints:
 
-🔐 Endpoints disponíveis
-1️⃣ Registrar um usuário
-Método: POST
+### 1. Registrar um novo usuário (`POST /register`)
 
-URL: /register
+* **Método:** `POST`
+* **URL:** `http://localhost:3000/register`
+* **Headers:** `Content-Type: application/json`
+* **Corpo (JSON):**
 
-Body (JSON):
+    ```json
+    {
+        "username": "seu_novo_usuario",
+        "password": "sua_senha_segura"
+    }
+    ```
+* **Resposta Esperada (Sucesso - Status 201):** `"Usuário registrado com sucesso."`
+* **Resposta Esperada (Erro - Status 400):**
+    * `"Nome de usuário e senha são obrigatórios."`
+    * `"Usuário já registrado."`
 
-json
-{
-  "username": "diego",
-  "password": "minhaSenhaSegura"
-}
-Resposta esperada: "Usuário registrado com sucesso."
+### 2. Fazer login e obter token JWT (`POST /login`)
 
-2️⃣ Fazer login e obter o token JWT
-Método: POST
+* **Método:** `POST`
+* **URL:** `http://localhost:3000/login`
+* **Headers:** `Content-Type: application/json`
+* **Corpo (JSON):** Utilize as mesmas credenciais usadas no registro.
 
-URL: /login
+    ```json
+    {
+        "username": "seu_novo_usuario",
+        "password": "sua_senha_segura"
+    }
+    ```
+* **Resposta Esperada (Sucesso - Status 200):**
 
-Body (JSON):
+    ```json
+    {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZXVfbm92b191c3VhcmlvIiwiaWF0IjoxNzE0ODIxNDIyLCJleHAiOjE3MTQ4MjUwMjJ9.xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+    ```
+* **Resposta Esperada (Erro - Status 404):** `"Usuário não encontrado."`
+* **Resposta Esperada (Erro - Status 400):** `"Senha incorreta."`
 
-json
-{
-  "username": "diego",
-  "password": "minhaSenhaSegura"
-}
-Resposta esperada:
+### 3. Acessar rota protegida (`GET /protected`)
 
-json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR..."
-}
-🔹 Copie esse token, pois ele será necessário para acessar a rota protegida.
+* **Método:** `GET`
+* **URL:** `http://localhost:3000/protected`
+* **Headers:** Adicione um header de autorização com o token JWT obtido no login.
 
-3️⃣ Acessar rota protegida
-Método: GET
+    ```http
+    Authorization: Bearer [SEU_TOKEN_AQUI]
+    ```
+* **Resposta Esperada (Sucesso - Status 200):**
 
-URL: /protected
+    ```json
+    "Acesso permitido! Bem-vindo, seu_novo_usuario"
+    ```
+* **Resposta Esperada (Erro - Status 403):**
+    * `"Acesso negado. Token não fornecido."`
+    * `"Token inválido."`
 
-Headers:
+## 🧪 Testando com cURL
 
-Authorization: Bearer SEU_TOKEN_AQUI
-Resposta esperada: "Acesso permitido! Bem-vindo, diego"
+Você também pode testar os endpoints utilizando o cURL no seu terminal:
 
-📌 Considerações finais
-✅ Senhas dos usuários são hashadas com bcryptjs antes de serem armazenadas. ✅ Tokens JWT são gerados com tempo de expiração (expiresIn: '1h'). ✅ Middleware de autenticação (authenticateJWT) protege rotas sensíveis.
+**➤ Registrar usuário:**
+
+```bash
+curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"username":"teste_curl","password":"senha_curl"}'

@@ -1,16 +1,22 @@
 # Dependências do Node.js
 node_modules/
 
-# Arquivos de log
-*.log
+# Arquivo de banco de dados SQLite
+users.db
+*.sqlite
+*.sqlite3
 
-# Configuração de ambiente
-.env
+# Logs e arquivos temporários
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.log
 
-# Cache do sistema e arquivos temporários
+# Configurações do sistema operacional
 .DS_Store
 Thumbs.db
 
-# Configuração de IDEs
-.vscode/
+# Configurações do editor
 .idea/
+.vscode/
+*.swp
