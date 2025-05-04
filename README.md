@@ -24,8 +24,8 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 1.  **Clone o repositório:**
 
     ```bash
-    git clone [https://docs.github.com/articles/referencing-and-citing-content](https://docs.github.com/articles/referencing-and-citing-content)
-    cd [https://github.com/DiegoCosta-DOC/Desafio_3.git]
+    git clone https://github.com/DiegoCosta-DOC/Desafio_3.git
+    cd Desafio_3
     ```
 2.  **Instale as dependências:**
 
